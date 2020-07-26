@@ -5,4 +5,7 @@ class Preprocessing():
         
     def _estimate_age(self, data):
         print('TODO')
-        return data
+
+    def preprocess(self):
+        print('TODO')
+    

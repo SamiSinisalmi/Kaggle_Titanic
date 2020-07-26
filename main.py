@@ -5,4 +5,4 @@ train = pd.read_csv("train.csv")
 test = pd.read_csv("test.csv")
 
 titanic = Titanic(train, test)
-titanic.preprocessing._estimate_age(train)
+X_train, X_test, y_train, y_test = titanic.machine_learning()
