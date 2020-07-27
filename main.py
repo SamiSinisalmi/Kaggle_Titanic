@@ -5,4 +5,7 @@ train = pd.read_csv("train.csv")
 test = pd.read_csv("test.csv")
 
 titanic = Titanic(train, test)
-X_train, X_test, y_train, y_test = titanic.machine_learning()
+titanic.machine_learning()
+train_after_processing = titanic.get_train_data()
+test_after_processing = titanic.get_test_data()
+titanic.results()

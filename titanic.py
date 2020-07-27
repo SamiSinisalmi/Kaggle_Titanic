@@ -12,25 +12,35 @@ class Titanic():
         
         print('Titanic object created')
         
-        self.y = train['Survived']
-        self.X = train.drop('Survived', axis=1)
-        
-        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(
-                self.X, self.y, test_size=0.4, random_state=0)
-        
         self.train = train
         self.test = test
         
         self.preprocessing = Preprocessing()
         
-    def _get_train_data(self):
+        print()
+        
+    def get_train_data(self):
+        
         return self.train
         
-    def _get_test_data(self):
+    def get_test_data(self):
+        
         return self.test
     
+    def _preprocess(self):
+        
+        self.train, self.test = self.preprocessing.preprocess(
+                self.train, self.test)
+    
     def machine_learning(self):
-        print('TODO')
+        
+        self._preprocess()
+        
+        y = self.train['Survived']
+        X = self.train.drop('Survived', axis=1)
+        
+        X_train, X_test, y_train, y_test = train_test_split(
+                X, y, test_size=0.4, random_state=0)
         
     def results(self):
         print('TODO')
