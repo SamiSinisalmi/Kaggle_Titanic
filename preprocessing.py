@@ -6,16 +6,19 @@ class Preprocessing():
         self.train = 0
         self.test = 0
         
-    def _process_age(self):
+    def _name(self):
         print('TODO')
         
-    def _process_cabin(self):
+    def _sex(self):
         print('TODO')
         
-    def _process_fare(self):
+    def _ticket(self):
         print('TODO')
         
-    def _process_embark(self):
+    def _cabin(self):
+        print('TODO')
+        
+    def _embark(self):
         print('TODO')
         
     def _fillna_with_zeros(self):
@@ -28,11 +31,7 @@ class Preprocessing():
         
         self.train = train
         self.test = test
-        
-        self._process_age()
-        self._process_cabin()
-        self._process_embark()
-        self._process_fare()      
+             
         self._fillna_with_zeros()
         
         print('Preprocessing done')

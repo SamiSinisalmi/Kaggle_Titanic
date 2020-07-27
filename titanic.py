@@ -18,14 +18,6 @@ class Titanic():
         self.preprocessing = Preprocessing()
         
         print()
-        
-    def get_train_data(self):
-        
-        return self.train
-        
-    def get_test_data(self):
-        
-        return self.test
     
     def _preprocess(self):
         
