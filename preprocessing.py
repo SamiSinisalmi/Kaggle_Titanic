@@ -34,7 +34,7 @@ class Preprocessing():
             self.test[name].fillna(0, inplace=True)
         
     def _numerice_columns(self):
-        
+        # Replaces all non numeric data values with a numeric value
         self._fillnan_str()
         self._fillnan_numeric()
         
