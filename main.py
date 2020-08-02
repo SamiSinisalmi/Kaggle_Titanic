@@ -5,5 +5,4 @@ train = pd.read_csv("train.csv")
 test = pd.read_csv("test.csv")
 
 titanic = Titanic(train, test)
-titanic.machine_learning()
-titanic.results()
+titanic.machine_learning('submission')

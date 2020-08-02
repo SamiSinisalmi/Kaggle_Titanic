@@ -1,5 +1,6 @@
-from preprocessing import Preprocessing
+import pandas as pd
 
+from preprocessing import Preprocessing
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
@@ -25,29 +26,55 @@ class Titanic():
         print()
     
     def _preprocess(self):
-        
+        # Preprocesses data using the preprocessing object
         self.train, self.test = self.preprocessing.preprocess(
                 self.train, self.test)
     
-    def machine_learning(self):
+    def machine_learning(self, mode):
+        
+        print('Selected mode:', mode)
+        print()
         
         self._preprocess()
         
         y = self.train['Survived']
         X = self.train.drop('Survived', axis=1)
         
-        X_train, X_test, y_train, y_test = train_test_split(
-                X, y, test_size=0.4, random_state=0)
-        
-        print('Training the classifier...')
         clf = RFC_model()
-        model = clf.fit(X_train, y_train)
-        y_pred = model.predict(X_test)
-        print('Training done')
-        self.accuracy_score = accuracy_score(y_test, y_pred)
+        
+        if (mode == 'submission'):
+            
+            filename = 'submission.csv'
+            print('Training the classifier...')
+            model = clf.fit(X, y)
+            y_pred = model.predict(self.test)
+            print('Training done')
+            
+            print('Writing results to csv file', filename + '...')
+            output = pd.DataFrame({'PassengerId': self.test['PassengerId'],
+                                   'Survived': y_pred})
+            output.to_csv(filename, index=False)
+            print('Writing done')
+        
+        elif (mode == 'evaluation'):
+            
+            X_train, X_test, y_train, y_test = train_test_split(
+                    X, y, test_size=0.4, random_state=0)
+            
+            print('Training the classifier...')
+            model = clf.fit(X_train, y_train)
+            y_pred = model.predict(X_test)
+            print('Training done')
+            self.accuracy_score = accuracy_score(y_test, y_pred)
+            self.results()
+            
+        else:
+            
+            print('Select mode (submission/evaluation)')
+        
         print()
         
-    def results(self):
+    def _results(self):
         print('Results:')
         print('Accuracy score: {:.4f}'.format(self.accuracy_score))
         
