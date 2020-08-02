@@ -57,3 +57,6 @@ class Preprocessing():
         
         return self.train, self.test
     
+    def __str__(self):
+        return 'Preprocessing'
+    

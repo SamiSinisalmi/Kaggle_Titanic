@@ -1,6 +1,9 @@
 from preprocessing import Preprocessing
 
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+from models.rfc_model import RFC_model
 
 class Titanic():
     
@@ -14,6 +17,8 @@ class Titanic():
         
         self.train = train
         self.test = test
+        
+        self.accuracy_score = 0
         
         self.preprocessing = Preprocessing()
         
@@ -34,5 +39,17 @@ class Titanic():
         X_train, X_test, y_train, y_test = train_test_split(
                 X, y, test_size=0.4, random_state=0)
         
+        print('Training the classifier...')
+        clf = RFC_model()
+        model = clf.fit(X_train, y_train)
+        y_pred = model.predict(X_test)
+        print('Training done')
+        self.accuracy_score = accuracy_score(y_test, y_pred)
+        print()
+        
     def results(self):
-        print('TODO')
+        print('Results:')
+        print('Accuracy score: {:.4f}'.format(self.accuracy_score))
+        
+    def __str__(self):
+        return 'Titanic'
