@@ -6,3 +6,5 @@ test = pd.read_csv("test.csv")
 
 titanic = Titanic(train, test)
 titanic.machine_learning('submission')
+
+train_processed, test_processed = titanic.return_data()

@@ -24,6 +24,9 @@ class Titanic():
         self.preprocessing = Preprocessing()
         
         print()
+        
+    def __str__(self):
+        return 'Titanic'
     
     def _preprocess(self):
         # Preprocesses data using the preprocessing object
@@ -38,8 +41,8 @@ class Titanic():
         # Passenger id columns are removed from data, passenger id column is
         # saved from test data for submission labeling
         passenger_id = self.test['PassengerId']
-        self.test.drop('PassengerId', axis=1)
-        self.train.drop('PassengerId', axis=1)
+        self.test = self.test.drop('PassengerId', axis=1)
+        self.train = self.train.drop('PassengerId', axis=1)
         
         # Preprocess training and test data
         self._preprocess()
@@ -89,10 +92,10 @@ class Titanic():
         
         print()
         
+    def return_data(self):
+        return self.train, self.test
+        
     def _results(self):
         # Prints usefull information gained in the evaluation process
         print('Results:')
         print('Accuracy score: {:.4f}'.format(self.accuracy_score))
-        
-    def __str__(self):
-        return 'Titanic'

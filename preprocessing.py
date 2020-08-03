@@ -15,13 +15,14 @@ class Preprocessing():
         # Extract titles from names for training data
         titles = []
         for name in self.train['Name']:
-            titles.append(name.split()[1])
+            titles.append(name.split(',')[1].split('.')[0])
         titles = pd.DataFrame({'Name': titles})
         self.train.update(titles)
+        
         # Extract titles from names for test data
         titles = []
         for name in self.test['Name']:
-            titles.append(name.split()[1])
+            titles.append(name.split(',')[1].split('.')[0])
         titles = pd.DataFrame({'Name': titles})
         self.test.update(titles)
         
