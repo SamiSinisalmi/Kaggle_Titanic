@@ -35,15 +35,27 @@ class Titanic():
         print('Selected mode:', mode)
         print()
         
+        # Passenger id columns are removed from data, passenger id column is
+        # saved from test data for submission labeling
+        passenger_id = self.test['PassengerId']
+        self.test.drop('PassengerId', axis=1)
+        self.train.drop('PassengerId', axis=1)
+        
+        # Preprocess training and test data
         self._preprocess()
         
+        # Training data is split into X (data) and y (labels)
         y = self.train['Survived']
         X = self.train.drop('Survived', axis=1)
         
+        # Used classifier
         clf = RFC_model()
         
         if (mode == 'submission'):
-            
+            # In submission mode classifier is trained using all training data
+            # available, trained model is used to classify test data, finally
+            # classified data is written into a csv file in submission format
+            # for kaggle
             filename = 'submission.csv'
             print('Training the classifier...')
             model = clf.fit(X, y)
@@ -51,13 +63,15 @@ class Titanic():
             print('Training done')
             
             print('Writing results to csv file', filename + '...')
-            output = pd.DataFrame({'PassengerId': self.test['PassengerId'],
+            output = pd.DataFrame({'PassengerId': passenger_id,
                                    'Survived': y_pred})
             output.to_csv(filename, index=False)
             print('Writing done')
         
         elif (mode == 'evaluation'):
-            
+            # In evaluation mode classifier is trained using partial training
+            # data and the classifier performance is evaluated using
+            # rest of the training data
             X_train, X_test, y_train, y_test = train_test_split(
                     X, y, test_size=0.4, random_state=0)
             
@@ -66,15 +80,17 @@ class Titanic():
             y_pred = model.predict(X_test)
             print('Training done')
             self.accuracy_score = accuracy_score(y_test, y_pred)
-            self.results()
+            self._results()
             
         else:
-            
+            # Prints error message if the entered mode command is incorrect
+            print('Error:')
             print('Select mode (submission/evaluation)')
         
         print()
         
     def _results(self):
+        # Prints usefull information gained in the evaluation process
         print('Results:')
         print('Accuracy score: {:.4f}'.format(self.accuracy_score))
         

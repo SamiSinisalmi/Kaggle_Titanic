@@ -1,4 +1,5 @@
 from sklearn import preprocessing
+import pandas as pd
 
 class Preprocessing():
     
@@ -10,14 +11,23 @@ class Preprocessing():
         
         self.encoder = preprocessing.LabelEncoder()
         
-    def _name(self):
-        print('TODO')
+    def _extract_titles(self):
+        # Extract titles from names for training data
+        titles = []
+        for name in self.train['Name']:
+            titles.append(name.split()[1])
+        titles = pd.DataFrame({'Name': titles})
+        self.train.update(titles)
+        # Extract titles from names for test data
+        titles = []
+        for name in self.test['Name']:
+            titles.append(name.split()[1])
+        titles = pd.DataFrame({'Name': titles})
+        self.test.update(titles)
         
-    def _ticket(self):
-        print('TODO')
-        
-    def _cabin(self):
-        print('TODO')
+    def _extract_features(self):
+        # Extracts features from data, replaces data with features from data
+        self._extract_titles()
         
     def _fillnan_str(self):
         # Replaces NaN values with 'Unknown'
@@ -50,6 +60,7 @@ class Preprocessing():
         self.train = train
         self.test = test
              
+        self._extract_features()
         self._numerice_columns()
         
         print('Preprocessing done')
