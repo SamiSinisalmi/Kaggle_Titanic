@@ -26,9 +26,25 @@ class Preprocessing():
         titles = pd.DataFrame({'Name': titles})
         self.test.update(titles)
         
+    def _estimate_missing_age(self):
+        print('TODO: ESTIMATE MISSING AGE')
+        
+    def _get_age_estimation(self, title):
+        if title == 'Miss':
+            return 22
+        elif title == 'Mrs':
+            return 36
+        elif title == 'Master':
+            return 5
+        elif title == 'Mr':
+            return 32
+        else:
+            return 40
+        
     def _extract_features(self):
         # Extracts features from data, replaces data with features from data
         self._extract_titles()
+        self._estimate_missing_age()
         
     def _fillnan_str(self):
         # Replaces NaN values with 'Unknown'
@@ -57,6 +73,7 @@ class Preprocessing():
     def preprocess(self, train, test):
         
         print('Starting preprocessing...')
+        print('TODO: REMOVE REPETITION FROM CODE')
         
         self.train = train
         self.test = test
