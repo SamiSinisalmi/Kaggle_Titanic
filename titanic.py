@@ -5,6 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
 from models.rfc_model import RFC_model
+from models.svm_model import SVM_model
 
 class Titanic():
     
@@ -53,6 +54,7 @@ class Titanic():
         
         # Used classifier
         clf = RFC_model()
+        #clf = SVM_model()
         
         if (mode == 'submission'):
             # In submission mode classifier is trained using all training data
@@ -97,5 +99,6 @@ class Titanic():
         
     def _results(self):
         # Prints usefull information gained in the evaluation process
+        print()
         print('Results:')
         print('Accuracy score: {:.4f}'.format(self.accuracy_score))
