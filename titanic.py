@@ -36,6 +36,7 @@ class Titanic():
     
     def machine_learning(self, mode):
         
+        print('TODO: fix machine_learning() so using it once does not disable it for using again')
         print('Selected mode:', mode)
         print()
         
