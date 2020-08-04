@@ -67,6 +67,7 @@ class Titanic():
             y_pred = model.predict(self.test)
             print('Training done')
             
+            print()
             print('Writing results to csv file', filename + '...')
             output = pd.DataFrame({'PassengerId': passenger_id,
                                    'Survived': y_pred})

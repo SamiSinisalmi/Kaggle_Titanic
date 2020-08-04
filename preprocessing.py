@@ -38,17 +38,17 @@ class Preprocessing():
         title = row[0]
         age = row[1]
         if pd.isnull(age):
-            if title == 'Miss':
+            if title == ' Miss':
                 return 21.8
-            elif title == 'Mrs':
+            elif title == ' Mrs':
                 return 35.72
-            elif title == 'Master':
+            elif title == ' Master':
                 return 4.57
-            elif title == 'Mr':
+            elif title == ' Mr':
                 return 32.37
-            elif title == 'Capt' or title == 'Col' or title == 'Major':
+            elif title == ' Capt' or title == ' Col' or title == ' Major':
                 return 48
-            elif title == 'Jonkheer' or title == 'Don' or title == 'Sir':
+            elif title == ' Jonkheer' or title == ' Don' or title == ' Sir':
                 return 40.5
             else:
                 return 42.33
@@ -71,8 +71,8 @@ class Preprocessing():
         # Replaces NaN values with 0
         column = ['Pclass', 'Age', 'SibSp', 'Parch', 'Fare']
         for name in column:
-            self.train[name].fillna(0, inplace=True)
-            self.test[name].fillna(0, inplace=True)
+            self.train[name].fillna(-1, inplace=True)
+            self.test[name].fillna(-1, inplace=True)
         
     def _numerice_columns(self):
         # Replaces all non numeric data values with a numeric value
