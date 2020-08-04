@@ -27,19 +27,33 @@ class Preprocessing():
         self.test.update(titles)
         
     def _estimate_missing_age(self):
-        print('TODO: ESTIMATE MISSING AGE')
+        # Fills nan age values with an estimated age value
+        self.train.Age = self.train[['Name', 'Age']].apply(
+                self._get_age_estimation, axis=1)
+        self.test.Age = self.test[['Name', 'Age']].apply(
+                self._get_age_estimation, axis=1)
         
-    def _get_age_estimation(self, title):
-        if title == 'Miss':
-            return 22
-        elif title == 'Mrs':
-            return 36
-        elif title == 'Master':
-            return 5
-        elif title == 'Mr':
-            return 32
+    def _get_age_estimation(self, row):
+        # Estimates age based on title from name
+        title = row[0]
+        age = row[1]
+        if pd.isnull(age):
+            if title == 'Miss':
+                return 21.8
+            elif title == 'Mrs':
+                return 35.72
+            elif title == 'Master':
+                return 4.57
+            elif title == 'Mr':
+                return 32.37
+            elif title == 'Capt' or title == 'Col' or title == 'Major':
+                return 48
+            elif title == 'Jonkheer' or title == 'Don' or title == 'Sir':
+                return 40.5
+            else:
+                return 42.33
         else:
-            return 40
+            return age
         
     def _extract_features(self):
         # Extracts features from data, replaces data with features from data
@@ -73,7 +87,6 @@ class Preprocessing():
     def preprocess(self, train, test):
         
         print('Starting preprocessing...')
-        print('TODO: REMOVE REPETITION FROM CODE')
         
         self.train = train
         self.test = test
