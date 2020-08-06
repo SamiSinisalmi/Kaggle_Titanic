@@ -26,12 +26,16 @@ class Titanic():
         
         self.preprocessing = Preprocessing()
         
+        self.passenger_id = self.test['PassengerId']
+        self.test = self.test.drop('PassengerId', axis=1)
+        self.train = self.train.drop('PassengerId', axis=1)
+        
         print()
         
     def __str__(self):
         return 'Titanic'
     
-    def _preprocess(self):
+    def preprocess(self):
         # Concats training and test data and feeds it into preprocessing
         data = pd.concat([self.train, self.test], sort=False)
         data = self.preprocessing.preprocess(data)
@@ -41,18 +45,8 @@ class Titanic():
     
     def machine_learning(self, mode):
         
-        print('TODO: fix machine_learning() so using it once does not disable it for using again')
         print('Selected mode:', mode)
         print()
-        
-        # Passenger id columns are removed from data, passenger id column is
-        # saved from test data for submission labeling
-        passenger_id = self.test['PassengerId']
-        self.test = self.test.drop('PassengerId', axis=1)
-        self.train = self.train.drop('PassengerId', axis=1)
-        
-        # Preprocess training and test data
-        self._preprocess()
         
         # Training data is split into X (data) and y (labels)
         y = self.train['Survived']
@@ -75,7 +69,7 @@ class Titanic():
             
             print()
             print('Writing results to csv file', filename + '...')
-            output = pd.DataFrame({'PassengerId': passenger_id,
+            output = pd.DataFrame({'PassengerId': self.passenger_id,
                                    'Survived': y_pred.astype(int)})
             output.to_csv(filename, index=False)
             print('Writing done')
