@@ -6,31 +6,21 @@ class Preprocessing():
     def __init__(self):
         print('Preprocessing object created')
         
-        self.train = 0
-        self.test = 0
+        self.data = 0
         
         self.encoder = preprocessing.LabelEncoder()
         
     def _extract_titles(self):
         # Extract titles from names for training data
         titles = []
-        for name in self.train['Name']:
+        for name in self.data['Name']:
             titles.append(name.split(',')[1].split('.')[0])
         titles = pd.DataFrame({'Name': titles})
-        self.train.update(titles)
-        
-        # Extract titles from names for test data
-        titles = []
-        for name in self.test['Name']:
-            titles.append(name.split(',')[1].split('.')[0])
-        titles = pd.DataFrame({'Name': titles})
-        self.test.update(titles)
+        self.data.update(titles)
         
     def _estimate_missing_age(self):
         # Fills nan age values with an estimated age value
-        self.train.Age = self.train[['Name', 'Age']].apply(
-                self._get_age_estimation, axis=1)
-        self.test.Age = self.test[['Name', 'Age']].apply(
+        self.data.Age = self.data[['Name', 'Age']].apply(
                 self._get_age_estimation, axis=1)
         
     def _get_age_estimation(self, row):
@@ -64,32 +54,28 @@ class Preprocessing():
         # Replaces NaN values with 'Unknown'
         column = ['Name', 'Sex', 'Ticket', 'Cabin', 'Embarked']
         for name in column:
-            self.train[name].fillna('Unknown', inplace=True)
-            self.test[name].fillna('Unknown', inplace=True)
+            self.data[name].fillna('Unknown', inplace=True)
             
     def _fillnan_numeric(self):
         # Replaces NaN values with 0
-        column = ['Pclass', 'Age', 'SibSp', 'Parch', 'Fare']
+        column = ['Pclass', 'Age', 'SibSp', 'Parch', 'Fare', 'Survived']
         for name in column:
-            self.train[name].fillna(-1, inplace=True)
-            self.test[name].fillna(-1, inplace=True)
+            self.data[name].fillna(-1, inplace=True)
         
     def _numerice_columns(self):
         # Replaces all non numeric data values with a numeric value
         self._fillnan_str()
         self._fillnan_numeric()
-        
+
         column = ['Sex', 'Name', 'Ticket', 'Cabin', 'Embarked']
         for name in column:
-            self.train[name] = self.encoder.fit_transform(self.train[name])
-            self.test[name] = self.encoder.fit_transform(self.test[name])
+            self.data[name] = self.encoder.fit_transform(self.data[name])
 
-    def preprocess(self, train, test):
+    def preprocess(self, data):
         
         print('Starting preprocessing...')
         
-        self.train = train
-        self.test = test
+        self.data = data
              
         self._extract_features()
         self._numerice_columns()
@@ -97,7 +83,7 @@ class Preprocessing():
         print('Preprocessing done')
         print()
         
-        return self.train, self.test
+        return self.data
     
     def __str__(self):
         return 'Preprocessing'

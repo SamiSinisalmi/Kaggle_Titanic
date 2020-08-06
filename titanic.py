@@ -2,10 +2,11 @@ import pandas as pd
 
 from preprocessing import Preprocessing
 from sklearn.model_selection import train_test_split
+from sklearn.model_selection import cross_val_score
 from sklearn.metrics import accuracy_score
 
 from models.rfc_model import RFC_model
-from models.svm_model import SVM_model
+#from models.svm_model import SVM_model
 
 class Titanic():
     
@@ -20,7 +21,8 @@ class Titanic():
         self.train = train
         self.test = test
         
-        self.accuracy_score = 0
+        self.scores = 0
+        self.score = 0
         
         self.preprocessing = Preprocessing()
         
@@ -30,9 +32,12 @@ class Titanic():
         return 'Titanic'
     
     def _preprocess(self):
-        # Preprocesses data using the preprocessing object
-        self.train, self.test = self.preprocessing.preprocess(
-                self.train, self.test)
+        # Concats training and test data and feeds it into preprocessing
+        data = pd.concat([self.train, self.test], sort=False)
+        data = self.preprocessing.preprocess(data)
+        self.train = data[:self.train.shape[0]]
+        self.test = data[self.train.shape[0]:]
+        self.test = self.test.drop(['Survived'], axis=1)
     
     def machine_learning(self, mode):
         
@@ -71,7 +76,7 @@ class Titanic():
             print()
             print('Writing results to csv file', filename + '...')
             output = pd.DataFrame({'PassengerId': passenger_id,
-                                   'Survived': y_pred})
+                                   'Survived': y_pred.astype(int)})
             output.to_csv(filename, index=False)
             print('Writing done')
         
@@ -85,8 +90,12 @@ class Titanic():
             print('Training the classifier...')
             model = clf.fit(X_train, y_train)
             y_pred = model.predict(X_test)
+            self.score = accuracy_score(y_test, y_pred)
+            self.scores = cross_val_score(
+                    clf, X, y, cv=10, scoring='accuracy')
             print('Training done')
-            self.accuracy_score = accuracy_score(y_test, y_pred)
+            
+            print()
             self._results()
             
         else:
@@ -101,6 +110,10 @@ class Titanic():
         
     def _results(self):
         # Prints usefull information gained in the evaluation process
-        print()
         print('Results:')
-        print('Accuracy score: {:.4f}'.format(self.accuracy_score))
+        print('Accuracy score: {:.4f}'.format(self.score))
+        print()
+        print('Results from cross validation:')
+        print('Cross validation accuracy scores:', self.scores)
+        print('Mean: {:.4f}'.format(self.scores.mean()))
+        print('Standard Deviation: {:.4f}'.format(self.scores.std()))
