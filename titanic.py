@@ -6,7 +6,6 @@ from sklearn.model_selection import cross_val_score
 from sklearn.metrics import accuracy_score
 
 from models.rfc_model import RFC_model
-#from models.svm_model import SVM_model
 
 class Titanic():
     
@@ -54,7 +53,6 @@ class Titanic():
         
         # Used classifier
         clf = RFC_model()
-        #clf = SVM_model()
         
         if (mode == 'submission'):
             # In submission mode classifier is trained using all training data
@@ -75,9 +73,8 @@ class Titanic():
             print('Writing done')
         
         elif (mode == 'evaluation'):
-            # In evaluation mode classifier is trained using partial training
-            # data and the classifier performance is evaluated using
-            # rest of the training data
+            # In evaluation mode classifier is trained and its performance
+            # is evaluated
             X_train, X_test, y_train, y_test = train_test_split(
                     X, y, test_size=0.4, random_state=0)
             

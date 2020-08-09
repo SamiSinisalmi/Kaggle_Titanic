@@ -23,6 +23,14 @@ class Preprocessing():
         self.data.Age = self.data[['Name', 'Age']].apply(
                 self._get_age_estimation, axis=1)
         
+    def _extract_cabin(self):
+        print('TODO: get cabin values')
+        # For now, deletes cabin and ticket columns as they are currenctly
+        # not processed
+        
+        self.data.drop('Ticket', axis=1)
+        self.data.drop('Cabin', axis=1)
+        
     def _get_age_estimation(self, row):
         # Estimates age based on title from name
         title = row[0]
@@ -49,21 +57,27 @@ class Preprocessing():
         # Extracts features from data, replaces data with features from data
         self._extract_titles()
         self._estimate_missing_age()
+        self._extract_cabin()
+        
+    def _fillnan_fare_mean(self):
+        # Fills NaN values in fare collumn with mean values
+        self.data.Fare = self.data.Fare.fillna(self.data.Fare.mean())
         
     def _fillnan_str(self):
         # Replaces NaN values with 'Unknown'
-        column = ['Name', 'Sex', 'Ticket', 'Cabin', 'Embarked']
+        column = ['Ticket', 'Cabin', 'Embarked']
         for name in column:
             self.data[name].fillna('Unknown', inplace=True)
             
     def _fillnan_numeric(self):
-        # Replaces NaN values with 0
-        column = ['Pclass', 'Age', 'SibSp', 'Parch', 'Fare', 'Survived']
+        # Replaces NaN values with -1
+        column = ['Pclass', 'SibSp', 'Parch', 'Survived']
         for name in column:
             self.data[name].fillna(-1, inplace=True)
         
     def _numerice_columns(self):
         # Replaces all non numeric data values with a numeric value
+        self._fillnan_fare_mean()
         self._fillnan_str()
         self._fillnan_numeric()
 
